@@ -1,4 +1,4 @@
-@Friendium.Api_HostAddress = http://localhost:5157
+@Friendium.Api_HostAddress = http://localhost:5251
 
 GET {{Friendium.Api_HostAddress}}/weatherforecast/
 Accept: application/json
