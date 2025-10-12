@@ -62,9 +62,9 @@ public sealed class AuthController(IAuthService service, IUserRepository repo) :
     public async Task<IActionResult> GetMe()
     {
         var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (!int.TryParse(idClaim, out var id)) return Unauthorized();
+        if (!Guid.TryParse(idClaim, out var id)) return Unauthorized();
 
-        var user = await repo.GetUserById(id);
+        var user = await repo.GetByIdAsync(id);
         if (user == null) return NotFound();
         
         return Ok(new UserDto(user.Id.ToString(), user.Name, user.Email));

@@ -4,10 +4,10 @@ namespace Friendium.Api.Repositories.Interfaces;
 
 public interface IUserRepository
 {
-    Task<IEnumerable<User>> GetAllUsers();
-    Task<User?> GetUserById(int id);
-    Task<User?> GetUserByEmail(string email);
-    Task CreateUser(User user);
-    Task UpdateUser(User user);
-    Task DeleteUser(User user);
+    Task<IEnumerable<User>> GetAllAsync();
+    Task<User?> GetByIdAsync(Guid id);
+    Task<User?> GetByEmailAsync(string email);
+    Task AddAsync(User user);
+    Task UpdateAsync(User user);
+    Task RemoveAsync(Guid userId);
 }

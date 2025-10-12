@@ -10,7 +10,7 @@ public class AuthService(IUserRepository repo, PasswordHasher<User> hasher) : IA
 {
     public async Task<User?> ValidateCredentialsAsync(LoginDto dto)
     {
-        var user = await repo.GetUserByEmail(dto.Email);
+        var user = await repo.GetByEmailAsync(dto.Email);
         if (user == null) return null;
         
         var result = hasher.VerifyHashedPassword(user, user.PasswordHash, dto.Password);
@@ -19,7 +19,7 @@ public class AuthService(IUserRepository repo, PasswordHasher<User> hasher) : IA
             if (result == PasswordVerificationResult.SuccessRehashNeeded)
             {
                 user.PasswordHash = hasher.HashPassword(user, dto.Password);
-                await repo.UpdateUser(user);
+                await repo.UpdateAsync(user);
             }
 
             return user;
@@ -31,7 +31,7 @@ public class AuthService(IUserRepository repo, PasswordHasher<User> hasher) : IA
 
     public async Task<UserDto> RegisterAsync(RegisterDto dto)
     {
-        var existingUser = await repo.GetUserByEmail(dto.Email);
+        var existingUser = await repo.GetByEmailAsync(dto.Email);
         if (existingUser != null)
             throw new UnauthorizedAccessException("Email already in use");
 
@@ -41,7 +41,7 @@ public class AuthService(IUserRepository repo, PasswordHasher<User> hasher) : IA
             Email = dto.Email,
         };
         newUser.PasswordHash = hasher.HashPassword(newUser, dto.Password);
-        await repo.CreateUser(newUser);
+        await repo.AddAsync(newUser);
         return new UserDto(newUser.Id.ToString(), newUser.Name, newUser.Email);
     }
 }
