@@ -6,7 +6,7 @@ namespace Friendium.Api.Models;
 public class UserProfile
 {
     public Guid Id { get; set; } = Guid.NewGuid();
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
     
     [MaxLength(255)]
     public string AvatarUrl { get; set; }  = string.Empty;
@@ -25,5 +25,5 @@ public class UserProfile
     public double Longitude { get; set; }
     public bool IsVisible { get; set; } = true;
     
-    public User? User { get; set; }
+    public User? User { get; init; }
 }

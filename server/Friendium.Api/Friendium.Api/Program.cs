@@ -16,7 +16,17 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // DI
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
+builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
+builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
+builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserProfileService, UserProfileService>();
+builder.Services.AddScoped<IUserActivityService, UserActivityService>();
+builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
+builder.Services.AddScoped<IFriendshipService, FriendshipService>();
 
 // Cookie authntication
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

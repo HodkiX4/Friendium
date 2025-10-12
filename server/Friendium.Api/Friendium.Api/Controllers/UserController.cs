@@ -1,12 +1,14 @@
 using Friendium.Api.DTOs;
 using Friendium.Api.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Friendium.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class UserController(IUserService service) : ControllerBase
+[Authorize]
+public sealed class UserController(IUserService service) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetUsers()
