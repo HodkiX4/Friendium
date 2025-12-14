@@ -2,20 +2,77 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Friendium.Api.Models;
 
-public class User
+/// <summary>
+/// Represents an application user, including personal information,
+/// authentication details, and relational data such as friends and requests.
+/// </summary>
+public sealed class User
 {
-    public Guid Id { get; init; }  = Guid.NewGuid();
+    /// <summary>
+    /// The unique identifier of the user.
+    /// </summary>
+    public Guid Id { get; init; } = Guid.NewGuid();
+
+    /// <summary>
+    /// The firstname of the user.  
+    /// Limited to 50 characters.
+    /// </summary>
     [MaxLength(50)]
-    public string Name { get; set; } = string.Empty;
+    public string Firstname { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The lastname of the user.  
+    /// Limited to 50 characters.
+    /// </summary>
+    [MaxLength(50)]
+    public string Lastname { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The user's email address, which is used for authentication.  
+    /// Limited to 80 characters.
+    /// </summary>
     [MaxLength(80)]
     public string Email { get; init; } = string.Empty;
+
+    /// <summary>
+    /// The hashed password for user authentication.  
+    /// Limited to 200 characters.
+    /// </summary>
     [MaxLength(200)]
     public string PasswordHash { get; set; } = string.Empty;
-    
+
+    /// <summary>
+    /// The UTC timestamp when the user account was created.
+    /// </summary>
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// The user's extended profile information (bio, preferences, gender, etc.).
+    /// </summary>
     public UserProfile? Profile { get; init; }
+
+    /// <summary>
+    /// The user's activity data (last seen, online status).
+    /// </summary>
     public UserActivity? Activity { get; init; }
-    
-    public ICollection<Friendship> Friends { get; set; } = [];
-    public ICollection<FriendRequest> SentRequests { get; set; } = [];
-    public ICollection<FriendRequest> ReceivedRequests { get; set; } = [];
+
+    /// <summary>
+    /// A collection of the user's friendships (approved friend relationships).
+    /// </summary>
+    public ICollection<Friendship> Friends { get; set; } = new List<Friendship>();
+
+    /// <summary>
+    /// A collection of friend requests sent by the user.
+    /// </summary>
+    public ICollection<FriendRequest> SentRequests { get; set; } = new List<FriendRequest>();
+
+    /// <summary>
+    /// A collection of friend requests received by the user.
+    /// </summary>
+    public ICollection<FriendRequest> ReceivedRequests { get; set; } = new List<FriendRequest>();
+
+    /// <summary>
+    /// Messages authored by the user.
+    /// </summary>
+    public ICollection<Message> Messages { get; set; } = new List<Message>();
 }

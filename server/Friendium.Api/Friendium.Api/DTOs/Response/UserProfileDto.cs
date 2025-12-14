@@ -1,6 +1,6 @@
 using Friendium.Api.Enums;
 
-namespace Friendium.Api.DTOs;
+namespace Friendium.Api.DTOs.Response;
 
 public record UserProfileDto(
     Guid UserId,

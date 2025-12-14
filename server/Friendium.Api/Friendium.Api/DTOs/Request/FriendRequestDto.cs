@@ -1,4 +1,4 @@
-namespace Friendium.Api.DTOs;
+namespace Friendium.Api.DTOs.Request;
 
 public record FriendRequestDto (
     Guid Id,

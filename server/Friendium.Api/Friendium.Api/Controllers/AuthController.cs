@@ -1,5 +1,7 @@
+using System.Security.Authentication;
 using System.Security.Claims;
-using Friendium.Api.DTOs;
+using Friendium.Api.DTOs.Request;
+using Friendium.Api.Exceptions;
 using Friendium.Api.Repositories.Interfaces;
 using Friendium.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
@@ -9,47 +11,77 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Friendium.Api.Controllers;
 
-[Route("api/[controller]")]
+/// <summary>
+/// Controller responsible for handling authentication-related endpoints:
+/// Registration, login, logout, and retrieving the currently authenticated user.
+/// </summary>
+[Route("api/auth")]
 [ApiController]
-public sealed class AuthController(IAuthService service, IUserRepository repo) : ControllerBase
+public sealed class AuthController(IAuthService service) : ControllerBase
 {
+    /// <summary>
+    /// Registers a new user and returns the UserDto.
+    /// </summary>
+    /// <returns>
+    /// Returns HTTP 200 with UserDto on success.
+    /// Returns HTTP 400 if the model state is invalid.
+    /// Returns HTTP 409 if the email already exists.
+    /// </returns>
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
-        if(!ModelState.IsValid) return BadRequest(ModelState);
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         try
         {
-            var existingUser = await service.RegisterAsync(dto);
-            var responseDto = new UserDto(existingUser.Id.ToString(), existingUser.Name, existingUser.Email);
-            return Ok(responseDto);
+            var createdUser = await service.RegisterAsync(dto);
+            return Ok(createdUser);
         }
-        catch (InvalidOperationException e)
+        catch (ConflictException e)
         {
             return Conflict(new { message = e.Message });
         }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
     }
 
+    /// <summary>
+    /// Logs in the user with email and password
+    /// </summary>
+    /// <returns>
+    /// Returns HTTP 200 with UserDto on successful login.
+    /// Returns HTTP 400 if the model state is invalid.
+    /// Returns HTTP 401 if credentials are invalid.
+    /// </returns>
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
-        if (!ModelState.IsValid) return BadRequest(ModelState);
-
-        var user = await service.ValidateCredentialsAsync(dto);
-        if (user == null) return Unauthorized();
-
-        var claims = new List<Claim>
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        try
         {
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Name, user.Name),
-            new Claim(ClaimTypes.Email, user.Email)
-        };
+            var user = await service.LoginAsync(dto);
+            return Ok(user);
+        }
+        catch (AuthenticationFailedException e)
+        {
+            return Unauthorized(new { message = e.Message });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
 
-        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-        var principal = new ClaimsPrincipal(identity);
-        
-        return Ok(new UserDto(user.Id.ToString(), user.Name, user.Email));
     }
 
+    /// <summary>
+    /// Logs out the currently authenticated user by clearing the authentication cookie.
+    /// </summary>
+    /// <returns>
+    /// Returns HTTP 204 No Content on success.
+    /// </returns>
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
@@ -57,17 +89,34 @@ public sealed class AuthController(IAuthService service, IUserRepository repo) :
         return NoContent();
     }
 
+    /// <summary>
+    /// Retrieves the currently authenticated user's information.
+    /// </summary>
+    /// <returns>
+    /// Returns HTTP 200 with UserDto for the authenticated user.
+    /// Returns HTTP 401 if the user is not authenticated.
+    /// Returns HTTP 404 if the user does not exist in the database.
+    /// </returns>
     [HttpGet("me")]
     [Authorize]
     public async Task<IActionResult> GetMe()
     {
-        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (!Guid.TryParse(idClaim, out var id)) return Unauthorized();
-
-        var user = await repo.GetByIdAsync(id);
-        if (user == null) return NotFound();
-        
-        return Ok(new UserDto(user.Id.ToString(), user.Name, user.Email));
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier);
+        if (!Guid.TryParse(idClaim!.Value, out var id))
+            return Unauthorized("Invalid session");
+        try
+        {
+            var user = await service.GetMeAsync(id);
+            return Ok(user);
+        }
+        catch (ResourceNotFoundException e)
+        {
+            return NotFound(new { message = e.Message });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
     }
-    
+
 }

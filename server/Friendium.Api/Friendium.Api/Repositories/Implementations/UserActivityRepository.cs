@@ -5,7 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Friendium.Api.Repositories.Implementations;
 
-public class UserActivityRepository(AppDbContext context) : IUserActivityRepository
+/// <summary>
+/// Repository implementation for user activity records.
+/// Handles logging, retrieval and removal of user activity entries.
+/// </summary>
+public sealed class UserActivityRepository(AppDbContext context) : IUserActivityRepository
 {
     public async Task<IEnumerable<UserActivity>> GetAllAsync(Guid userId)
         => await context.UserActivities
@@ -19,13 +23,9 @@ public class UserActivityRepository(AppDbContext context) : IUserActivityReposit
         await context.SaveChangesAsync();
     }
 
-    public async Task RemoveAsync(Guid id)
+    public async Task RemoveAsync(UserActivity activity)
     {
-        var activity = await context.UserActivities.FindAsync(id);
-        if (activity != null)
-        {
-            context.UserActivities.Remove(activity);
-            await context.SaveChangesAsync();
-        }
+        context.UserActivities.Remove(activity);
+        await context.SaveChangesAsync();
     }
 }

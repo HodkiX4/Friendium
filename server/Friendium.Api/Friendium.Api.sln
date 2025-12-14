@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friendium.Api", "Friendium.Api\Friendium.Api.csproj", "{732FE468-2287-4D70-A455-3E18D5595CF3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Friendium.Api.Test", "Friendium.Api.Test\Friendium.Api.Test.csproj", "{FD985F1D-82CC-4C76-AC0F-67EBA6458BB3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{732FE468-2287-4D70-A455-3E18D5595CF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{732FE468-2287-4D70-A455-3E18D5595CF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{732FE468-2287-4D70-A455-3E18D5595CF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FD985F1D-82CC-4C76-AC0F-67EBA6458BB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FD985F1D-82CC-4C76-AC0F-67EBA6458BB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FD985F1D-82CC-4C76-AC0F-67EBA6458BB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FD985F1D-82CC-4C76-AC0F-67EBA6458BB3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

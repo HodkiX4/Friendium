@@ -4,7 +4,11 @@ using Friendium.Api.Services.Interfaces;
 
 namespace Friendium.Api.Services.Implementations;
 
-public class UserActivityService(IUserActivityRepository repo) : IUserActivityService
+/// <summary>
+/// Service implementation for user activity handling.
+/// Responsible for retrieving, logging and deleting user activity entries.
+/// </summary>
+public sealed class UserActivityService(IUserActivityRepository repo) : IUserActivityService
 {
     public Task<IEnumerable<UserActivity>> GetActivities(Guid userId, string action)
     {

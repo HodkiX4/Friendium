@@ -5,7 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Friendium.Api.Repositories.Implementations;
 
-public class FriendRequestRepository(AppDbContext context) : IFriendRequestRepository
+/// <summary>
+/// Repository implementation for friend request storage.
+/// Handles creation, acceptance, rejection and querying of friend requests.
+/// </summary>
+public sealed class FriendRequestRepository(AppDbContext context) : IFriendRequestRepository
 {
     public async Task<FriendRequest?> GetByIdAsync(Guid id)
         => await context.FriendRequests.FindAsync(id);
@@ -16,25 +20,18 @@ public class FriendRequestRepository(AppDbContext context) : IFriendRequestRepos
         await context.SaveChangesAsync();
     }
 
-    public async Task AcceptAsync(Guid requestId)
+    public async Task AcceptAsync(FriendRequest friendRequest)
     {
-        var friendRequest = await context.FriendRequests.FindAsync(requestId);
-        if (friendRequest != null)
-        {
-            friendRequest.IsAccepted = true;
-            context.FriendRequests.Update(friendRequest);
-            await context.SaveChangesAsync();
-        }
+        friendRequest.IsAccepted = true;
+        context.FriendRequests.Update(friendRequest);
+        await context.SaveChangesAsync();
     }
 
-    public async Task RejectAsync(Guid requestId)
+    public async Task RejectAsync(FriendRequest friendRequest)
     {
-        var friendRequest = await context.FriendRequests.FindAsync(requestId);
-        if (friendRequest != null)
-        {
-            context.FriendRequests.Remove(friendRequest);
-            await context.SaveChangesAsync();
-        }
+        context.FriendRequests.Remove(friendRequest);
+        await context.SaveChangesAsync();
+
     }
 
     public async Task<IEnumerable<FriendRequest>> GetIncomingAsync(Guid userId)

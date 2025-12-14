@@ -1,11 +1,17 @@
+using Friendium.Api.DTOs.Request;
+using Friendium.Api.Exceptions;
 using Friendium.Api.Models;
 using Friendium.Api.Repositories.Interfaces;
 using Friendium.Api.Services.Interfaces;
 
 namespace Friendium.Api.Services.Implementations;
 
-public class FriendRequestService(
-    IFriendRequestRepository friendRequestRepo, 
+/// <summary>
+/// Service implementation for handling friend requests.
+/// Implements sending, accepting, rejecting and listing pending requests.
+/// </summary>
+public sealed class FriendRequestService(
+    IFriendRequestRepository friendRequestRepo,
     IUserRepository userRepo
     ) : IFriendRequestService
 {
@@ -14,28 +20,46 @@ public class FriendRequestService(
         var sender = await userRepo.GetByIdAsync(senderId);
         var receiver = await userRepo.GetByIdAsync(receiverId);
         if (receiver == null && sender == null)
-            throw new InvalidOperationException("Sender or Receiver doesn't exist");
-        
+            throw new ResourceNotFoundException("Sender or Receiver doesn't exist");
+
         var exists = await friendRequestRepo.ExistsAsync(senderId, receiverId);
         if (exists)
-            throw new InvalidOperationException("Friend request already exists");
+            throw new ConflictException("Friend request already exists");
 
         var newFriendRequest = new FriendRequest
         {
             SenderId = senderId,
             ReceiverId = receiverId,
         };
-        
+
         await friendRequestRepo.AddAsync(newFriendRequest);
     }
 
     public async Task AcceptRequest(Guid requestId)
-        => await friendRequestRepo.AcceptAsync(requestId);
+    {
+        var friendRequest = await friendRequestRepo.GetByIdAsync(requestId);
+        if (friendRequest == null)
+            throw new ResourceNotFoundException("Friend request not found");
+        await friendRequestRepo.AcceptAsync(friendRequest);
+    }
 
-    public Task RejectRequest(Guid requestId)
-        => friendRequestRepo.RejectAsync(requestId);
+    public async Task RejectRequest(Guid requestId)
+    {
+        var friendRequest = await friendRequestRepo.GetByIdAsync(requestId);
+        if (friendRequest == null)
+            throw new ResourceNotFoundException("Friend request not found");
+        await friendRequestRepo.RejectAsync(friendRequest);
+    }
 
-    public async Task<IEnumerable<FriendRequest>> GetPendingRequests(Guid userId)
-        => await friendRequestRepo.GetIncomingAsync(userId);
-
+    public async Task<IEnumerable<FriendRequestDto>> GetPendingRequests(Guid userId)
+    {
+        var requests = await friendRequestRepo.GetIncomingAsync(userId);
+        return requests.Select(fr => new FriendRequestDto(
+            fr.Id,
+            fr.SenderId,
+            fr.ReceiverId,
+            fr.SentAt,
+            fr.IsAccepted
+            ));
+    }
 }

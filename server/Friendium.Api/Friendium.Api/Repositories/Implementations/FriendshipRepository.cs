@@ -5,7 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Friendium.Api.Repositories.Implementations;
 
-public class FriendshipRepository(AppDbContext context) : IFriendshipRepository
+/// <summary>
+/// Repository implementation for friendship records.
+/// Provides methods to query and remove friendships for a user.
+/// </summary>
+public sealed class FriendshipRepository(AppDbContext context) : IFriendshipRepository
 {
     public async Task<IEnumerable<Friendship>> GetAllAsync(Guid userId)
         => await context.Friendships
@@ -13,13 +17,12 @@ public class FriendshipRepository(AppDbContext context) : IFriendshipRepository
             .Where(fs => fs.UserId == userId)
             .ToListAsync();
 
-    public async Task RemoveAsync(Guid id)
+    public async Task<Friendship?> GetByIdAsync(Guid friendshipId)
+        => await context.Friendships.FindAsync(friendshipId);
+
+    public async Task RemoveAsync(Friendship friendship)
     {
-        var friendship = await context.Friendships.FindAsync(id);
-        if (friendship != null)
-        {
-            context.Friendships.Remove(friendship);
-            await context.SaveChangesAsync();
-        }
+        context.Friendships.Remove(friendship);
+        await context.SaveChangesAsync();
     }
 }
