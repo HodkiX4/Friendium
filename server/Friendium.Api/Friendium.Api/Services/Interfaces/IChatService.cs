@@ -8,5 +8,10 @@ namespace Friendium.Api.Services.Interfaces;
 /// </summary>
 public interface IChatService
 {
-    // Define chat service operations here as needed.
+    Task<IEnumerable<Chat>> GetUserChats(Guid userId);
+
+    Task<Chat?> GetChatById(Guid chatId);
+
+    Task DeleteChat(Guid chatId);
+
 }

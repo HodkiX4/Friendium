@@ -21,6 +21,11 @@ public interface IMessageRepository
     Task AddAsync(Message message);
 
     /// <summary>
+    /// Tries to get a message by its unique identifier.
+    /// </summary>
+    Task<Message?> GetByIdAsync(Guid id);
+
+    /// <summary>
     /// Updates a chat message sent by the user. 
     /// </summary>
     /// <param name="message">The message we want to add to upate</param>

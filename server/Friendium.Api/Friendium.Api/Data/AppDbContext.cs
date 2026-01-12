@@ -2,6 +2,7 @@ using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Friendium.Api.Models;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Friendium.Api.Data;
 
@@ -75,13 +76,27 @@ public class AppDbContext : DbContext
             v => SerializeStrings(v),
             v => DeserializeStrings(v));
 
+        var guidCollectionComparer = new ValueComparer<ICollection<Guid>>(
+            (a, b) => a != null && b != null && a.SequenceEqual(b),
+            v => v.Aggregate(0, (c, x) => HashCode.Combine(c, x.GetHashCode())),
+            v => v.ToList()
+        );
+
+        var stringCollectionComparer = new ValueComparer<ICollection<string>>(
+            (a, b) => a != null && b != null && a.SequenceEqual(b),
+            v => v.Aggregate(0, (c, x) => HashCode.Combine(c, x.GetHashCode())),
+            v => v.ToList()
+        );
+
         modelBuilder.Entity<Chat>()
             .Property(c => c.UserIds)
-            .HasConversion(guidListConverter);
+            .HasConversion(guidListConverter)
+            .Metadata.SetValueComparer(guidCollectionComparer);
 
         modelBuilder.Entity<UserProfile>()
             .Property(p => p.Interests)
-            .HasConversion(stringListConverter);
+            .HasConversion(stringListConverter)
+            .Metadata.SetValueComparer(stringCollectionComparer);
     }
 
     // Helper methods used by value-converter expressions. Kept static so they can be

@@ -15,7 +15,7 @@ public sealed class UserService(IUserRepository repo) : IUserService
     public async Task<IEnumerable<UserDto>> GetUsers()
     {
         var users = await repo.GetAllAsync();
-        return users.Select(u => new UserDto(u.Id.ToString(), u.Firstname, u.Lastname, u.Email));
+        return users.Select(u => new UserDto(u.Id, u.Firstname, u.Lastname, u.Email));
     }
 
     public async Task<UserDto?> GetUserById(Guid userId)
@@ -23,7 +23,7 @@ public sealed class UserService(IUserRepository repo) : IUserService
         var user = await repo.GetByIdAsync(userId);
         if (user == null)
             throw new ResourceNotFoundException("User not found");
-        return new UserDto(user.Id.ToString(), user.Firstname, user.Lastname, user.Email);
+        return new UserDto(user.Id, user.Firstname, user.Lastname, user.Email);
     }
 
     public async Task<UserDto?> UpdateUserName(Guid userId, UserDto updatedUser)
@@ -37,7 +37,7 @@ public sealed class UserService(IUserRepository repo) : IUserService
 
         await repo.UpdateAsync(existingUser);
 
-        return new UserDto(existingUser.Id.ToString(), existingUser.Firstname, existingUser.Lastname, existingUser.Email);
+        return new UserDto(existingUser.Id, existingUser.Firstname, existingUser.Lastname, existingUser.Email);
     }
 
     public async Task DeleteUser(Guid userId)

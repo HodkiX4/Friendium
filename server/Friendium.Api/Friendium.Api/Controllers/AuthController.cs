@@ -1,8 +1,6 @@
-using System.Security.Authentication;
 using System.Security.Claims;
 using Friendium.Api.DTOs.Request;
 using Friendium.Api.Exceptions;
-using Friendium.Api.Repositories.Interfaces;
 using Friendium.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -43,6 +41,7 @@ public sealed class AuthController(IAuthService service) : ControllerBase
         }
         catch (Exception e)
         {
+            Console.WriteLine(e);
             return BadRequest(new { message = e.Message });
         }
     }

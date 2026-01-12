@@ -1,9 +1,9 @@
 namespace Friendium.Api.DTOs.Request;
 
-public record FriendRequestDto (
+public record FriendRequestDto(
     Guid Id,
     Guid SenderId,
-    Guid ReceiverId,  
-    DateTime SentAt,  
+    Guid ReceiverId,
+    DateTime SentAt,
     bool IsAccepted
 );

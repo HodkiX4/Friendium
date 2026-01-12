@@ -11,45 +11,66 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// -------------------------------
+// 1️⃣ CORS
+// -------------------------------
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policyBuilder =>
+    options.AddPolicy("CorsPolicy", policy =>
     {
-        policyBuilder.WithOrigins("http://localhost:3000")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
+        policy.WithOrigins("http://localhost:3000")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
-
-// Database Configuration
+// -------------------------------
+// 2️⃣ DbContext
+// -------------------------------
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("FriendiumDatabaseConnection")));
 
-// Dependency Injection (Repository + Services)
+// -------------------------------
+// 3️⃣ Utilities
+// -------------------------------
+builder.Services.AddHttpContextAccessor(); // MUST be BEFORE services that need it
+builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
+
+// -------------------------------
+// 4️⃣ Repositories
+// -------------------------------
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserProfileRepository, UserProfileRepository>();
 builder.Services.AddScoped<IUserActivityRepository, UserActivityRepository>();
 builder.Services.AddScoped<IFriendRequestRepository, FriendRequestRepository>();
 builder.Services.AddScoped<IFriendshipRepository, FriendshipRepository>();
+builder.Services.AddScoped<IChatRepository, ChatRepository>();
+builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
+// -------------------------------
+// 5️⃣ Services
+// -------------------------------
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<IUserActivityService, UserActivityService>();
 builder.Services.AddScoped<IFriendRequestService, FriendRequestService>();
 builder.Services.AddScoped<IFriendshipService, FriendshipService>();
+builder.Services.AddScoped<IChatService, ChatService>();
+builder.Services.AddScoped<IMessageService, MessageService>();
 
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-
-// Authentication (Cookie-based)
+// -------------------------------
+// 6️⃣ Authentication (Cookie-based)
+// -------------------------------
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie("authCookie",options =>
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
         options.Cookie.HttpOnly = true;
-        options.Cookie.SameSite = SameSiteMode.None;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        options.Cookie.SameSite = SameSiteMode.Lax; // cross-origin (frontend ↔ backend)
+        options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
+            ? CookieSecurePolicy.None  // localhost HTTP
+            : CookieSecurePolicy.Always; // prod HTTPS
         options.ExpireTimeSpan = TimeSpan.FromDays(7);
 
         options.Events.OnRedirectToLogin = context =>
@@ -64,33 +85,45 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         };
     });
 
-// Add Controllers + Utilities
+// -------------------------------
+// 7️⃣ Controllers + JSON Options
+// -------------------------------
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         // options.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
-    });;
-builder.Services.AddHttpContextAccessor();
+    });
+
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// -------------------------------
+// 8️⃣ Build App
+// -------------------------------
 var app = builder.Build();
 
-// Middleware Pipeline
+// -------------------------------
+// 9️⃣ Middleware Pipeline
+// -------------------------------
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.UseHttpsRedirection();
+
+// app.UseHttpsRedirection(); // Dev HTTP miatt kikommentelve
+
 app.UseCors("CorsPolicy");
 app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Health check endpoint
+app.MapGet("/", () => $"Friendium API is running on {app.Environment.EnvironmentName} environment.");
 
 app.Run();

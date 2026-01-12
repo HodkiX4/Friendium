@@ -1,3 +1,6 @@
+using System.Security.Claims;
+using Friendium.Api.DTOs.Request;
+using Friendium.Api.DTOs.Response;
 using Friendium.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,11 +12,14 @@ namespace Friendium.Api.Controllers;
 [ApiController]
 public class MessagesController(IMessageService messageService) : ControllerBase
 {
-    public async Task<IActionResult> GetMessagesForChat(Guid chatId)
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetMessageById(Guid id)
     {
         try
         {
-            return Ok();
+            var message = await messageService.GetMessageById(id);
+            return Ok(message);
         }
         catch (Exception e)
         {
@@ -21,11 +27,20 @@ public class MessagesController(IMessageService messageService) : ControllerBase
         }
     }
 
-    public async Task<IActionResult> SendMessage()
+    [HttpPost("/{chatId:guid}")]
+    public async Task<IActionResult> SendMessage([FromRoute] Guid chatId, [FromBody] AddMessageDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+
+        var idClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        if (!Guid.TryParse(idClaim, out var userId))
+            return Unauthorized("Invalid session");
+
         try
         {
-            return Ok();
+            var message = await messageService.SendMessage(userId, chatId, dto);
+            return CreatedAtAction(nameof(GetMessageById), new { id = message.Id }, message);
         }
         catch (Exception e)
         {
@@ -33,11 +48,15 @@ public class MessagesController(IMessageService messageService) : ControllerBase
         }
     }
 
-    public async Task<IActionResult> UpdateMessage(Guid messageId)
+    [HttpPut("{messageId:guid}")]
+    public async Task<IActionResult> UpdateMessage([FromRoute] Guid messageId, [FromBody] UpdateMessageDto dto)
     {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
         try
         {
-            return Ok();
+            var message = await messageService.UpdateMessage(messageId, dto);
+            return Ok(message);
         }
         catch (Exception e)
         {
@@ -45,11 +64,13 @@ public class MessagesController(IMessageService messageService) : ControllerBase
         }
     }
 
-    public async Task<IActionResult> DeleteMessage(Guid messageId)
+    [HttpDelete("{messageId:guid}")]
+    public async Task<IActionResult> DeleteMessage([FromRoute] Guid messageId)
     {
         try
         {
-            return Ok();
+            await messageService.DeleteMessage(messageId);
+            return NoContent();
         }
         catch (Exception e)
         {

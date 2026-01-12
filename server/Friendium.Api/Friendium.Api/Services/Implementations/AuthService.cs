@@ -65,7 +65,7 @@ public sealed class AuthService(IUserRepository repo, IHttpContextAccessor httpC
             authProperties);
 
         // Returns a UserDto, which doesn't contain sensitive data.
-        return new UserDto(existingUser.Id.ToString(), existingUser.Firstname, existingUser.Lastname, existingUser.Email);
+        return new UserDto(existingUser.Id, existingUser.Firstname, existingUser.Lastname, existingUser.Email);
     }
 
 
@@ -116,7 +116,7 @@ public sealed class AuthService(IUserRepository repo, IHttpContextAccessor httpC
             new ClaimsPrincipal(claimsIdentity),
             authProperties);
         // Returns a user dto, which doesn't contain sensitive data.
-        return new UserDto(newUser.Id.ToString(), newUser.Firstname, newUser.Lastname, newUser.Email);
+        return new UserDto(newUser.Id, newUser.Firstname, newUser.Lastname, newUser.Email);
     }
 
     public async Task<UserDto> GetMeAsync(Guid id)
@@ -124,6 +124,6 @@ public sealed class AuthService(IUserRepository repo, IHttpContextAccessor httpC
         var user = await repo.GetByIdAsync(id);
         return user == null ?
             throw new ResourceNotFoundException("User not found") :
-            new UserDto(user.Id.ToString(), user.Firstname, user.Lastname, user.Email);
+            new UserDto(user.Id, user.Firstname, user.Lastname, user.Email);
     }
 }

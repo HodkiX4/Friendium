@@ -16,11 +16,15 @@ public sealed class MessageRepository(AppDbContext context) : IMessageRepository
             .Where(m => m.ChatId == chatId)
             .ToListAsync();
 
+    public async Task<Message?> GetByIdAsync(Guid id)
+        => await context.Messages.FindAsync(id);
+
     public async Task AddAsync(Message message)
     {
         await context.Messages.AddAsync(message);
         await context.SaveChangesAsync();
     }
+
 
     public async Task UpdateAsync(Message message)
     {

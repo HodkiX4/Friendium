@@ -1,8 +1,6 @@
-using Friendium.Api.DTOs;
 using Friendium.Api.DTOs.Request;
 using Friendium.Api.DTOs.Response;
 using Friendium.Api.Exceptions;
-using Friendium.Api.Models;
 using Friendium.Api.Repositories.Interfaces;
 using Friendium.Api.Services.Interfaces;
 
@@ -20,6 +18,7 @@ public sealed class UserProfileService(IUserProfileRepository repo) : IUserProfi
         if (existingProfile == null)
             throw new ResourceNotFoundException("User profile not found");
         return new UserProfileDto(
+            existingProfile.Id,
             existingProfile.UserId,
             existingProfile.AvatarUrl,
             existingProfile.Bio,
@@ -59,6 +58,7 @@ public sealed class UserProfileService(IUserProfileRepository repo) : IUserProfi
 
         await repo.UpdateAsync(existingProfile);
         return new UserProfileDto(
+            existingProfile.Id,
             existingProfile.UserId,
             existingProfile.AvatarUrl,
             existingProfile.Bio,
