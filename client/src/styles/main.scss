@@ -1,0 +1,66 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Raleway", Arial;
+}
+
+h1,h2,h3,h4,h5,h6 {
+    font-weight: 700;
+    color: $color-primary;
+    letter-spacing: .3rem;
+}
+
+h1 {
+    font-size: 2.4rem;
+}
+
+h2 {
+    font-size: 2.2rem;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+h4 {
+    font-size: 1.8rem;
+}
+
+h5 {
+    font-size: 1.6rem;
+}
+
+h6 {
+    font-size: 1.4rem;
+}
+
+p {
+    font-size: $font-sm;
+    color: $color-dark;
+}
+
+a {
+    font-size: $font-md;
+    text-decoration: none;
+}
+
+button {
+    font-weight: 900;
+    letter-spacing: $spacing-xs;
+    cursor: pointer;
+    color: $gray-100;
+    background-color: $color-primary;
+    padding: $spacing-md $spacing-lg;
+    border: none;
+    border-radius: $radius-md;
+    box-shadow: $shadow-sm;
+    transition: $transition-fast;
+    &:hover {
+        transform: scale(1.05);
+    }
+    &:active {
+        transform: scale(1);
+    }
+ }

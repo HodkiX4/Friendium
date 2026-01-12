@@ -1,0 +1,17 @@
+.AuthLayout {
+    height: 100dvh;
+    padding: $spacing-lg;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    
+    .backBtn {
+        display: flex;
+        font-size: $font-xl;
+        padding: $spacing-sm;
+        position: absolute;
+        top: $spacing-sm;
+        left: $spacing-sm;
+    }
+}

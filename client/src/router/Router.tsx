@@ -1,33 +1,39 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import AuthLayout from '../layouts/AuthLayout'
-import ProtectedLayout from '../layouts/ProtectedLayout'
-import LoginPage from '../pages/Auth/LoginPage'
-import SignUpPage from '../pages/Auth/SignUpPage'
-import ChatDetailPage from '../pages/Chat/ChatDetailPage'
-import ChatsPage from '../pages/Chat/ChatsPage'
-import HomePage from '../pages/Home/HomePage'
-import ProfilePage from '../pages/Profile/ProfilePage'
-import SearchPage from '../pages/Search/SearchPage'
-import SettingsPage from '../pages/Settings/SettingsPage'
+
+const WelcomePage = lazy(() => import('../pages/Welcome/WelcomePage'))
+const LoginPage = lazy(() => import('../pages/Auth/LoginPage'))
+const SignUpPage = lazy(() => import('../pages/Auth/SignUpPage'))
+const HomePage = lazy(() => import('../pages/Home/HomePage'))
+const ChatsPage = lazy(() => import('../pages/Chat/ChatsPage'))
+const ChatDetailPage = lazy(() => import('../pages/Chat/ChatDetailPage'))
+const ProfilePage = lazy(() => import('../pages/Profile/ProfilePage'))
+const SearchPage = lazy(() => import('../pages/Search/SearchPage'))
+const SettingsPage = lazy(() => import('../pages/Settings/SettingsPage'))
+const AuthLayout = lazy(() => import('../layouts/AuthLayout'))
+const ProtectedLayout = lazy(() => import('../layouts/ProtectedLayout'))
 
 function Router() {
   return (
     <BrowserRouter>
+      <Suspense fallback={<div>Loading...</div>}>
         <Routes>
-          <Route path="/auth" element={<AuthLayout/>}>
-            <Route path="/login" element={<LoginPage/>} />
-            <Route path="/signup" element={<SignUpPage/>} />
+          <Route path="/" element={<AuthLayout/>}>
+          <Route index element={<WelcomePage/>}/>
+            <Route path="login" element={<LoginPage/>} />
+            <Route path="signup" element={<SignUpPage/>} />
           </Route>
-          <Route path="/protected" element={<ProtectedLayout/>}>
+          <Route path="protected" element={<ProtectedLayout/>}>
             <Route index element={<HomePage/>} />
-            <Route path="/chat" element={<ChatsPage/>}>
+            <Route path="chat" element={<ChatsPage/>}>
               <Route path=":chatId" element={<ChatDetailPage/>} />
             </Route>
-            <Route path="/profile" element={<ProfilePage/>} />
-            <Route path="/search" element={<SearchPage/>} />
-            <Route path="/settings" element={<SettingsPage/>} />
+            <Route path="profile" element={<ProfilePage/>} />
+            <Route path="search" element={<SearchPage/>} />
+            <Route path="settings" element={<SettingsPage/>} />
           </Route>
         </Routes>
+      </Suspense>
     </BrowserRouter>
   )
 }
