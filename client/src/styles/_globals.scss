@@ -1,0 +1,28 @@
+/* Custom scrollbar styles */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: $color-primary $gray-200;
+}
+
+*::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+    background: $gray-200;
+    border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: $color-primary;
+    border-radius: 4px;
+    
+    &:hover {
+        background: $color-primary-dark;
+    }
+}
+
+*::-webkit-scrollbar-corner {
+    background: $gray-200;
+}

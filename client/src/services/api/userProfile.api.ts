@@ -14,7 +14,7 @@ export const profileService = {
     },
     update: async (userId: string, payload: IUpdateUserProfilePayload): Promise<IUserProfile> => {
         const res = await API
-            .post<IUserProfile>(`/users/profile/${userId}`, payload);
+            .put<IUserProfile>(`/users/profile/${userId}`, payload);
         return res.data;
     }
 }

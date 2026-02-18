@@ -1,25 +1,40 @@
 import { Link } from 'react-router-dom';
 import Styles from './Welcome.module.scss';
+import { FaHeart, FaUserFriends } from 'react-icons/fa';
+import { FaMessage } from 'react-icons/fa6';
 
 function WelcomePage() {
   return (
     <div className={Styles.container}>
         <header>
+            <span className={Styles.icon}>
+                <FaUserFriends/>
+            </span>
             <h1>Friendium</h1>
+            <p>Friendium is a friendly social platform designed to help you meet new people, make friends, and build genuine connections.</p>
         </header>
         <main>
-            <section className={Styles.welcome}>
-
-            <h4>Welcome to Friendium</h4>
-            <h6>Here to help you find, real connections</h6>
-            </section>
-
-            <section className={Styles.introduction}>
-            <p>Friendium is a friendly social platform designed to help you meet new people, make friends, and build genuine connections. Whether you're new in town or just looking for someone who shares your interests, Friendium makes it easy to discover and connect. Start your journey toward new friendships today!</p>
-            </section>
-            <section className={Styles.screenshots}>
-                {/*<img src="" alt="" />*/}
-            </section>
+            <div className={`${Styles.card} ${Styles.find}`}>
+                <span className={Styles.icon}>
+                    <FaUserFriends/>
+                </span>
+                <span className={Styles.cardTitle}>Find friends</span>
+                <p>Discover people with similar interests and hobbies</p>
+            </div>
+            <div className={`${Styles.card} ${Styles.build}`}>
+                <span className={Styles.icon}>
+                    <FaHeart/>
+                </span>
+                <span className={Styles.cardTitle}>Build Connections</span>
+                <p>Send friend requests and grow your network</p>
+            </div>
+            <div className={`${Styles.card} ${Styles.chat}`}>
+                <span className={Styles.icon}>
+                    <FaMessage/>
+                </span>
+                <span className={Styles.cardTitle}>Chat in Real-Time</span>
+                <p>Have conversations with your friends instantly</p>
+            </div>
         </main>
         <footer>
             <Link to="/auth/login">
@@ -33,4 +48,4 @@ function WelcomePage() {
   )
 }
 
-export default WelcomePage
+export default WelcomePage;

@@ -1,0 +1,400 @@
+.profileForm {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 520px;
+  width: 90%;
+  background-color: $bg-color;
+  border: 4px outset $bg-color;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-md;
+  padding: $spacing-xl;
+  gap: $spacing-md;
+
+  h3 {
+    font-size: $font-xl;
+    margin: 0;
+    text-align: center;
+    color: $gray-900;
+  }
+
+  > span {
+    color: $gray-700;
+    text-align: center;
+    font-size: $font-sm;
+    margin-bottom: $spacing-sm;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: $spacing-md;
+  }
+}
+
+.avatarRow {
+  display: flex;
+  justify-content: center;
+  padding: $spacing-md 0;
+}
+
+.avatarWrap {
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+}
+
+.avatarImg,
+.avatarPlaceholder {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 4px solid $color-primary-light;
+  box-shadow: $shadow-md;
+}
+
+.avatarImg {
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  background: $gray-200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $gray-500;
+  font-size: 4rem;
+}
+
+.cameraOverlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: $color-primary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: $font-lg;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+.hiddenFile {
+  display: none;
+}
+
+.row {
+  display: flex;
+  gap: $spacing-sm;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.row input {
+  flex: 1 1 calc(50% - $spacing-sm / 2);
+  min-width: 0;
+  font-size: $font-md;
+  padding: $spacing-md;
+  background-color: $gray-100;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+  outline: none;
+  box-shadow: $shadow-sm;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+  }
+
+  &:hover {
+    border-color: $color-primary;
+  }
+
+  &::placeholder {
+    color: $gray-500;
+  }
+}
+
+.textarea,
+.hobbiesRow input {
+  font-size: $font-md;
+  padding: $spacing-md;
+  background-color: $gray-100;
+  border: 1px solid $gray-200;
+  border-radius: $radius-md;
+  outline: none;
+  box-shadow: $shadow-sm;
+  transition: all 0.2s ease;
+
+  &:focus {
+    outline: 2px solid $color-primary;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+  }
+
+  &:hover {
+    border-color: $color-primary;
+  }
+
+  &::placeholder {
+    color: $gray-500;
+  }
+}
+
+.textarea {
+  min-height: 80px;
+  resize: vertical;
+  font-family: inherit;
+  margin-bottom: 0;
+}
+
+.hobbiesLabel {
+  margin-top: $spacing-sm;
+  margin-bottom: $spacing-xs;
+  font-weight: 600;
+  color: $gray-100;
+  font-size: $font-md;
+}
+
+.hobbiesRow input {
+  flex: 1;
+  min-width: 0;
+}
+
+.hobbiesRow {
+  display: flex;
+  gap: $spacing-sm;
+  align-items: center;
+  width: 100%;
+}
+
+.addBtn {
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  padding: $spacing-md;
+  border-radius: $radius-md;
+  cursor: pointer;
+  font-size: $font-md;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  height: 44px;
+
+  &:hover {
+    background: adjust($color-primary, -10%);
+    transform: translateY(-1px);
+    box-shadow: $shadow-sm;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+.hobbyList {
+  list-style: none;
+  padding: 0;
+  margin: $spacing-sm 0;
+  display: flex;
+  gap: $spacing-xs;
+  flex-wrap: wrap;
+  min-height: 40px;
+}
+
+.hobbyItem {
+  background: linear-gradient(
+    135deg,
+    rgba($color-primary, 0.1),
+    rgba($color-primary, 0.05)
+  );
+  border: 1px solid rgba($color-primary, 0.2);
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $radius-md;
+  display: flex;
+  gap: $spacing-xs;
+  align-items: center;
+  color: $gray-700;
+  font-size: $font-sm;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: linear-gradient(
+      135deg,
+      rgba($color-primary, 0.15),
+      rgba($color-primary, 0.08)
+    );
+    border-color: rgba($color-primary, 0.3);
+  }
+}
+
+.removeHobby {
+  background: transparent;
+  border: none;
+  color: $color-error;
+  cursor: pointer;
+  padding: 2px;
+  display: inline-flex;
+  align-items: center;
+  font-size: $font-sm;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: adjust($color-error, -10%);
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-md;
+  margin-top: $spacing-lg;
+  width: 100%;
+  padding-top: $spacing-md;
+  border-top: 1px solid $gray-300;
+}
+
+.skipLink {
+  color: $gray-700;
+  text-decoration: none;
+  font-size: $font-md;
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: $gray-500;
+    text-decoration: underline;
+  }
+}
+
+.submitBtn {
+  background: $color-primary;
+  color: #fff;
+  border: none;
+  padding: $spacing-md $spacing-lg;
+  border-radius: $radius-md;
+  cursor: pointer;
+  font-size: $font-md;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  box-shadow: $shadow-sm;
+
+  &:hover {
+    background: adjust($color-primary, -10%);
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .profileForm {
+    width: 95%;
+    padding: $spacing-lg;
+    border: 2px solid $gray-300;
+
+    h3 {
+      font-size: $font-xl;
+    }
+
+    > span {
+      font-size: $font-xs;
+    }
+  }
+
+  .avatarWrap {
+    width: 100px;
+    height: 100px;
+  }
+
+  .avatarIcon {
+    font-size: 72px;
+  }
+
+  .row {
+    flex-direction: column;
+
+    input {
+      flex: 1 1 100%;
+    }
+  }
+
+  .actions {
+    flex-direction: column-reverse;
+    gap: $spacing-sm;
+
+    .submitBtn {
+      width: 100%;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .profileForm {
+    width: 100%;
+    padding: $spacing-md;
+    border-radius: $radius-lg;
+    top: 50%;
+
+    h3 {
+      font-size: $font-lg;
+    }
+
+    form {
+      gap: $spacing-sm;
+    }
+  }
+
+  .avatarWrap {
+    width: 88px;
+    height: 88px;
+  }
+
+  .avatarIcon {
+    font-size: 64px;
+  }
+
+  .row input,
+  .textarea,
+  .hobbiesRow input {
+    padding: $spacing-sm;
+    font-size: $font-sm;
+  }
+
+  .addBtn {
+    min-width: 40px;
+    height: 40px;
+    padding: $spacing-sm;
+  }
+
+  .submitBtn {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-sm;
+  }
+}

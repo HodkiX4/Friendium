@@ -2,7 +2,9 @@ import LoginForm from "../../components/forms/Auth/LoginForm"
 
 function LoginPage() {
   return (
-    <LoginForm/>
+    <div className="overlay">
+      <LoginForm/>
+    </div>
   )
 }
 

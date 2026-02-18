@@ -1,92 +1,218 @@
 .container {
+    background: $bg-secondary;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding: $spacing-lg;
+    border-radius: $radius-md;
     display: flex;
     flex-direction: column;
-    height: 100dvh;
-
+    justify-content: center;
+    align-items: center;
+    gap: $spacing-lg;
+    .icon {
+        display: inline-flex;
+        background-color: $color-primary;
+        color: white;
+        border-radius: $radius-round;
+    }
     header {
-        padding: $spacing-sm;
-        flex-basis: 20%;
-
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: $spacing-md;
+        width: 40dvw;
+        min-width: 320px;
         h1 {
-            font-size: 6rem;
+            background: $gradient-blue;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+            display: inline-block;
+            background-repeat: no-repeat;
+            font-size: 4rem;
+            font-weight: 800;
+            letter-spacing: .5rem;
             text-shadow: $shadow-md;
             &::first-letter {
-                font-style: italic;
                 font-weight: 900;
-                text-shadow: $spacing-xl;
-                font-size: 7.5rem;
+                font-size: 4.5rem;
             }
-            @media(max-width: 786) {
-                font-size: 1.6rem;
-                
+        }
+        .icon {
+            font-size: 3.5rem;
+            padding: $spacing-xl;
+        }
+        
+        p {
+            font-size: 1.2rem;
+            color: $text-primary;
+            text-align: center;
+            line-height: 1.4;
+        }
+    }
+    main {
+        display: flex;
+        justify-content: space-evenly;
+        gap: $spacing-lg;
+        .card {
+            background: $gradient-card;
+            border: 1px solid $gray-200;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            gap: $spacing-sm;
+            padding: $spacing-lg 0;
+            border-radius: $radius-lg;
+            width: 320px;
+            max-width: 30dvw;
+            box-shadow: $shadow-md;
+            .icon {
+                font-size: 1.7rem;
+                padding: $spacing-md;
+            }
+            .cardTitle {
+                color: $text-primary;
+                font-weight: bolder;
+                font-size: 1.1rem;
+            }
+            p {
+                font-size: 1rem;
+                text-align: center;
+                width: 80%;
+                color: $text-secondary;
+            }
+        }
+
+        .find .icon {
+            background-color: rgba($color-primary, .7);
+        }
+        .build .icon {
+            background-color: rgba($color-happy, .7);
+        }
+        .chat .icon {
+            background-color: rgba($color-info, .7);
+        }
+
+    }
+    
+    footer {
+        display: flex;
+        justify-content: center;
+        gap: $spacing-lg;
+        
+        button {
+            width: 180px;
+        }
+    }
+    
+}
+
+@media(max-width: 786px) {
+    .container {
+        padding: $spacing-md;
+        gap: $spacing-md;
+        
+        header {
+            width: 100%;
+            min-width: auto;
+            gap: $spacing-sm;
+            
+            h1 {
+                font-size: 2.5rem;
+                letter-spacing: .2rem;
                 &::first-letter {
-                    font-size: 2.3rem;
+                    font-size: 3rem;
+                }
+            }
+            
+            .icon {
+                font-size: 2.5rem;
+                padding: $spacing-lg;
+            }
+            
+            p {
+                font-size: 1rem;
+                padding: 0 $spacing-sm;
+            }
+        }
+        
+        main {
+            flex-direction: column;
+            align-items: center;
+            gap: $spacing-md;
+            width: 100%;
+            
+            .card {
+                width: 100%;
+                max-width: 100%;
+                padding: $spacing-md;
+                
+                .icon {
+                    font-size: 1.5rem;
+                    padding: $spacing-sm;
+                }
+                
+                .cardTitle {
+                    font-size: 1rem;
+                }
+                
+                p {
+                    font-size: 0.9rem;
                 }
             }
         }
-
-       
-    }
-
-    main {
-        display: grid;
-        grid-template-columns: 1fr 1fr; // két oszlop: bal szöveg, jobb kép
-        grid-template-rows: auto 1fr;  // a bal oldali két section egymás alatt
-        gap: $spacing-lg;
-        padding: $spacing-lg;
-        flex-basis: 60%;
-
-        .welcome {
-            grid-column: 1;  // bal oszlop
-            grid-row: 1;
-            h4 {
-                margin-bottom: $spacing-sm;
-                text-shadow: $shadow-sm;
-            }
-            h6 {
-                color: $gray-900
-            }
-        }
-
-        .introduction {
-            grid-column: 1;
-            grid-row: 2;
-        }
-
-        .screenshots {
-            grid-column: 2;  // jobb oszlop
-            grid-row: 1 / span 2; // két sor magasságot lefed
-            display: flex;
-            justify-content: center;
-            align-items: center;
-
-            img {
-            max-width: 100%;
-            border-radius: $radius-md;
-            box-shadow: $shadow-md;
-            object-fit: cover;
-            }
-        }
-
-        p {
-            font-size: $font-md;
-            line-height: 1.5;
-        }
-
-        @media(max-width: 786) {
-            display: flex;
+        
+        footer {
             flex-direction: column;
-        }
-    }
-
-    footer {
-        flex-basis: 20%;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-        button {
-            width: 200px;
+            gap: $spacing-sm;
+            width: 100%;
+            
+            button {
+                width: 100%;
+                max-width: 320px;
+            }
         }
     }
 }
 
+@media(max-width: 480px) {
+    .container {
+        padding: $spacing-sm;
+        
+        header {
+            h1 {
+                font-size: 2rem;
+                letter-spacing: .15rem;
+                &::first-letter {
+                    font-size: 2.5rem;
+                }
+            }
+            
+            .icon {
+                font-size: 2rem;
+                padding: $spacing-md;
+            }
+            
+            p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        main {
+            .card {
+                padding: $spacing-sm;
+            }
+        }
+        
+        footer {
+            button {
+                max-width: 100%;
+            }
+        }
+    }
+}

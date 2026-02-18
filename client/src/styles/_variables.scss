@@ -1,29 +1,50 @@
-// Colors
-$color-primary: hsl(210, 80%, 55%);
-$color-secondary: hsl(210, 20%, 75%);
-$color-success: hsl(145, 63%, 37%);
-$color-error: hsl(0, 78%, 50%);
-$color-warning: hsl(45, 100%, 51%);
-$color-info: hsl(190, 90%, 48%);
-$color-light: hsl(0, 0%, 98%);
-$color-dark: hsl(210, 20%, 15%);
+// Modern Blue & White Theme Colors
+$color-primary: #3B82F6;        // Bright blue
+$color-primary-dark: #2563EB;   // Darker blue for hover
+$color-primary-light: #60A5FA;  // Light blue for accents
+$color-secondary: #6366F1;      // Indigo
+$color-success: #10B981;        // Green
+$color-error: #EF4444;          // Red
+$color-warning: #F59E0B;        // Amber
+$color-info: #06B6D4;           // Cyan
+$color-light: #F8FAFC;          // Very light blue-gray
+$color-happy: #EC4899;          // Pink
+$color-dark: #1E293B;           // Dark slate
+$bg-color: #FFFFFF;             // Pure white background
+$bg-secondary: #F8FAFC;         // Light gray-blue for cards
 
-// Gray scale (100-900)
-$gray-100: hsl(0, 0%, 98%);
-$gray-200: hsl(0, 0%, 93%);
-$gray-300: hsl(0, 0%, 88%);
-$gray-400: hsl(0, 0%, 83%);
-$gray-500: hsl(0, 0%, 78%);
-$gray-600: hsl(0, 0%, 73%);
-$gray-700: hsl(0, 0%, 68%);
-$gray-800: hsl(0, 0%, 63%);
-$gray-900: hsl(0, 0%, 58%);
+// Gray scale - Modern blue-tinted grays
+$gray-50: #F9FAFB;   // Extra lightest
+$gray-100: #F8FAFC;  // Lightest
+$gray-200: #E2E8F0;
+$gray-300: #CBD5E1;
+$gray-400: #94A3B8;
+$gray-500: #64748B;
+$gray-600: #475569;
+$gray-700: #334155;
+$gray-800: #1E293B;
+$gray-900: #0F172A;  // Darkest
 
-// Shadows
-$shadow-sm: 1px 1px 2px $color-dark;
-$shadow-md: 4px 4px 6px $color-dark;
-$shadow-lg: 10px 10px 12px $color-dark;
-$shadow-xl: 20px 20px 24px $color-dark;
+// Text colors
+$text-primary: #0F172A;
+$text-secondary: #1E293B;
+$text-muted: #475569;
+
+// Text colors
+$text-primary: #1E293B;
+$text-secondary: #475569;
+$text-muted: #64748B;
+
+// Gradients
+$gradient-blue: linear-gradient(135deg, #3B82F6 0%, #2563EB 50%, #1D4ED8 100%);
+$gradient-card: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(37, 99, 235, 0.08) 100%);
+
+// Shadows - Lighter, more subtle
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+$shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+$shadow-blue: 0 4px 14px 0 rgba(59, 130, 246, 0.15);  // Blue shadow for primary elements
 
 // Spacing
 $spacing-xs: 0.25rem;  // 4px
@@ -37,6 +58,7 @@ $radius-sm: 0.125rem;  // 2px
 $radius-md: 0.25rem;   // 4px
 $radius-lg: 0.5rem;    // 8px
 $radius-xl: 1rem;      // 16px
+$radius-round: 50%;
 
 // Font sizes
 $font-xs: 0.75rem;   // 12px

@@ -1,17 +1,30 @@
-.AuthLayout {
+.authLayout, .protectedLayout {
     height: 100dvh;
-    padding: $spacing-lg;
     display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: $bg-color;
+}
+
+.protectedLayout {
+    padding: 0;
+    background: $bg-secondary;
+}
+
+.mainContent {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.authLayout {    
     justify-content: flex-start;
     align-items: center;
-    flex-direction: column;
-    
-    .backBtn {
-        display: flex;
-        font-size: $font-xl;
-        padding: $spacing-sm;
-        position: absolute;
-        top: $spacing-sm;
-        left: $spacing-sm;
+    padding: $spacing-lg;
+}
+
+@media (max-width: 720px) {
+    .authLayout {
+        padding: 1rem;
     }
 }

@@ -1,20 +1,31 @@
-.AuthForm {
+.backBtn {
+    display: flex;
+    font-size: $font-xl;
+    padding: $spacing-sm;
+    position: absolute;
+    top: $spacing-sm;
+    left: $spacing-sm;
+}
+
+
+.authForm {
     display: flex;
     flex-direction: column;
     align-items: center;
     max-width: 420px;
-    box-shadow: $shadow-md;
+    box-shadow: $shadow-xl;
     padding: $spacing-xl $spacing-lg;
-    border: 3px outset $gray-100;
+    border: 1px solid $gray-200;
     border-radius: $radius-xl;
     gap: $spacing-lg;
+    background: $gradient-card;
     
-    @media(max-width: 768px) {
-        padding: $spacing-sm;
-        box-shadow: none;
-        border: none;
-        border-radius: none;
-        margin-top: 0;
+    h3 {
+        color: $text-primary;
+    }
+    
+    span {
+        color: $text-secondary;
     }
 
     form {
@@ -22,24 +33,40 @@
         justify-content: center;
         flex-wrap: wrap;
         gap: $spacing-lg;
+        width: 100%;
     
+        > * {
+            width: 100%;
+        }
+
         input, select {
             font-size: $font-md;
             width: 100%;
-            background-color: $gray-100;
+            background-color: white;
+            color: $text-primary;
             padding: $spacing-md;
-            border: none;
+            border: 1px solid $gray-300;
             border-radius: $radius-md;
-            outline: 1px solid $gray-200;
+            outline: none;
             box-shadow: $shadow-sm;
-            transition: $transition-fast;
-            &:hover, &:focus {
-                background-color: white;
-                outline: 2px solid $color-primary;
+            transition: all $transition-medium;
+            margin-bottom: 0;
+            
+            &:hover {
+                border-color: $color-primary-light;
+            }
+            
+            &:focus {
+                border-color: $color-primary;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+
+            &.error {
+                border-color: $color-error;
             }
         }
 
-        .JoinedInputs {
+        .joinedInputs {
             display: flex;
             gap: $spacing-sm;
             width: 100%;
@@ -47,8 +74,9 @@
 
         button {
             width: 100%;
-            font-size: $font-lg;
+            font-size: $font-md;
             border: none;
+            margin-top: $spacing-sm;
         }
     }
 
@@ -56,10 +84,104 @@
         background-color: $color-success;
     }
 
-    .FieldError {
+    .fieldError {
         color: $color-error;
         font-size: $font-sm;
-        margin-top: $spacing-xs;
+        font-weight: 500;
         width: 100%;
+        display: block;
+        height: 0;
+        overflow: visible;
+        margin: 0;
+        padding: 0;
+        line-height: 1.2;
+        margin-top: 4px;
+    }
+}
+
+@media(max-width: 768px) {
+    .authForm {
+        padding: $spacing-md;
+        box-shadow: none;
+        border-radius: $radius-lg;
+        max-width: 100%;
+        width: 100%;
+        margin: 0 $spacing-sm;
+
+        h3 {
+            font-size: $font-xl;
+        }
+
+        span {
+            font-size: $font-sm;
+            text-align: center;
+        }
+
+        form {
+            gap: $spacing-md;
+
+            .joinedInputs {
+                flex-direction: column;
+                gap: $spacing-md;
+            }
+
+            input, select {
+                padding: $spacing-sm;
+                font-size: $font-md;
+            }
+
+            button {
+                padding: $spacing-md;
+                font-size: $font-md;
+            }
+        }
+
+        .navBtn {
+            padding: $spacing-sm;
+            font-size: $font-md;
+        }
+    }
+
+    .backBtn {
+        font-size: $font-lg;
+        padding: $spacing-xs;
+        top: $spacing-xs;
+        left: $spacing-xs;
+    }
+}
+
+@media(max-width: 480px) {
+    .authForm {
+        padding: $spacing-sm;
+        margin: 0;
+        border-radius: $radius-md;
+        gap: $spacing-md;
+
+        h3 {
+            font-size: $font-lg;
+        }
+
+        span {
+            font-size: $font-xs;
+        }
+
+        form {
+            gap: $spacing-sm;
+
+            input, select {
+                padding: 0.65rem;
+                font-size: $font-sm;
+            }
+
+            button {
+                padding: $spacing-sm;
+                font-size: $font-sm;
+            }
+        }
+
+        .navBtn {
+            padding: 0.65rem;
+            font-size: $font-sm;
+        }
     }
 }

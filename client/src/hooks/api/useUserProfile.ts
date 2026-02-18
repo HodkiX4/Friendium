@@ -1,24 +1,44 @@
+import { useState } from "react";
 import { profileService } from "../../services/api/userProfile.api";
-import { useAsyncHandler } from "../handler/useAsyncHandler";
+import type { IUserProfile } from "../../models/userProfile.model";
 
 export const useUserProfile = () => {
-    const { runAsync } = useAsyncHandler();
-    const handleGetUserProfiles = async () => {
-        await runAsync(async () => {
-            const profiles = await profileService.getAll();
-            console.log(profiles);
-        });
+    const [profile, setProfile] = useState<IUserProfile | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    
+    const handleGetUserProfileById = async (id: string): Promise<void> => {
+        try {
+            setIsLoading(true);
+            const profile = await profileService.getById(id);
+
+            if (!profile) throw new Error("User profile not found");
+            setProfile(profile);
+        } catch (error) {
+            console.error("Error fetching user profile:", error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
     }
 
-    const handleUpdateUserProfile = async (userId: string, payload: any) => {
-        await runAsync(async () => {
+    const updateUserProfile = async (userId: string, payload: any): Promise<IUserProfile> => {
+        try {
+            setIsLoading(true);
             const updatedProfile = await profileService.update(userId, payload);
-            console.log(updatedProfile);
-        });
+            setProfile(updatedProfile);
+            return updatedProfile;
+        } catch (error) {
+            console.error("Error updating user profile:", error);
+            throw error;
+        } finally {
+            setIsLoading(false);
+        }
     }
 
     return {
-        handleGetUserProfiles,
-        handleUpdateUserProfile
+        profile,
+        isLoading,
+        handleGetUserProfileById,
+        updateUserProfile
     }
 };

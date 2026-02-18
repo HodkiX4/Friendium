@@ -1,20 +1,20 @@
 import { create } from "zustand";
-import type { IUser } from "../models/user.model";
 import { persist } from "zustand/middleware";
+import type { IUserSearchResult } from "../models/userProfile.model";
 
 interface UsersState {
-    users: IUser[];
-    setUsers: (users: IUser[]) => void;
+    publicUsers: IUserSearchResult[];
+    setPublicUsers: (users: IUserSearchResult[]) => void;
 }
 export const useUsersStore = create<UsersState>()(
      persist(
         (set) => ({
-            users: [],
-            setUsers: (users) => set({ users }) 
+            publicUsers: [],
+            setPublicUsers: (publicUsers) => set({ publicUsers }) 
         }),
         {
             name: "users-storage",
-            partialize: (state) => ({ users: state.users })
+            partialize: (state) => ({ publicUsers: state.publicUsers })
         }
     )
 );

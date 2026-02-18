@@ -1,19 +1,13 @@
-import { Link, Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import Styles from './Layout.module.scss';
-import { MdOutlineArrowBack } from 'react-icons/md';
 import { useAuthStore } from "../store/authStore";
 function AuthLayout() {
     const { user } = useAuthStore();
-
+    
     return user
-        ? <Navigate to="/protected" replace /> // ide kell menni, nem login
+        ? <Navigate to="/protected/home" replace />
         : (
-            <div className={Styles.AuthLayout}>
-                <Link to="/">
-                    <button className={Styles.backBtn} >
-                        <MdOutlineArrowBack/> 
-                    </button>
-                </Link>
+            <div className={Styles.authLayout}>
                 <Outlet/>
             </div>
         );
