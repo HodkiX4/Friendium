@@ -7,6 +7,7 @@ using Friendium.Api.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using Friendium.Api.Exceptions;
 
 namespace Friendium.Api.Services.Implementations;
@@ -15,7 +16,7 @@ namespace Friendium.Api.Services.Implementations;
 /// Service implementation for authentication operations.
 /// Handles user login, registration, password hashing, and cookie-based authentication.
 /// </summary>
-public sealed class AuthService(IUserRepository repo, IHttpContextAccessor httpContextAccessor, IPasswordHasher<User> hasher) : IAuthService
+public sealed class AuthService(IUserRepository repo, IUserProfileRepository profileRepo, IHttpContextAccessor httpContextAccessor, IPasswordHasher<User> hasher) : IAuthService
 {
     public async Task<UserDto> LoginAsync(LoginDto dto)
     {
@@ -89,6 +90,20 @@ public sealed class AuthService(IUserRepository repo, IHttpContextAccessor httpC
 
         // Saves the user to the database
         await repo.AddAsync(newUser);
+
+        if (!DateOnly.TryParse(dto.DateOfBirth, out var parsedDob))
+            throw new ValidationException("DateOfBirth is not in a valid format");
+
+        var newProfile = new UserProfile
+        {
+            UserId = newUser.Id,
+            Gender = dto.Gender,
+            DateOfBirth = parsedDob,
+        };
+
+        Console.WriteLine(newProfile);
+        await profileRepo.AddAsync(newProfile);
+
 
         // Creates a list containing the user claims.
         // These will be sent in the cookie, so the client side knows, who is the current user.

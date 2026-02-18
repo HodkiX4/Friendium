@@ -7,7 +7,6 @@ namespace Friendium.Api.Repositories.Interfaces;
 /// </summary>
 public interface IFriendRequestRepository
 {
-
     /// <summary>
     /// Tries to get a friend request by its unique identifier.
     /// </summary>
@@ -31,7 +30,7 @@ public interface IFriendRequestRepository
     /// Rejects a friend request.
     /// </summary>
     /// <param name="request">The friend request we want to reject.</param>
-    Task RejectAsync(FriendRequest friendRequest);
+    Task RemoveAsync(FriendRequest friendRequest);
 
     /// <summary>
     /// Gets the friend requests received by the specified user.

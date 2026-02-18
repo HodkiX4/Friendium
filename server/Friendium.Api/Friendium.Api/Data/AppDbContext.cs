@@ -52,6 +52,11 @@ public class AppDbContext : DbContext
             .HasForeignKey(f => f.FriendId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        // Add unique constraint to prevent duplicate friendships
+        modelBuilder.Entity<Friendship>()
+            .HasIndex(f => new { f.UserId, f.FriendId })
+            .IsUnique();
+
         // Message -> User and Message -> Chat
         modelBuilder.Entity<Message>()
             .HasOne(m => m.User)
@@ -64,6 +69,14 @@ public class AppDbContext : DbContext
             .WithMany(c => c.Messages)
             .HasForeignKey(m => m.ChatId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<Notification>()
+            .HasOne(n => n.User)
+            .WithMany(u => u.Notifications)
+            .HasForeignKey(n => n.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+
 
         // Chat.UserIds and UserProfile.Interests are collections of simple types.
         // Convert them to JSON strings for storage.
@@ -117,6 +130,7 @@ public class AppDbContext : DbContext
     public DbSet<UserActivity> UserActivities { get; set; } = null!;
     public DbSet<FriendRequest> FriendRequests { get; set; } = null!;
     public DbSet<Friendship> Friendships { get; set; } = null!;
-    public DbSet<Message> Messages { get; set; } = null!;
     public DbSet<Chat> Chats { get; set; } = null!;
+    public DbSet<Message> Messages { get; set; } = null!;
+    public DbSet<Notification> Notifications { get; set; } = null!;
 }

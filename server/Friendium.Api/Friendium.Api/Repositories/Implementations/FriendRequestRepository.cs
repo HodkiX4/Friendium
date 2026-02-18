@@ -27,7 +27,7 @@ public sealed class FriendRequestRepository(AppDbContext context) : IFriendReque
         await context.SaveChangesAsync();
     }
 
-    public async Task RejectAsync(FriendRequest friendRequest)
+    public async Task RemoveAsync(FriendRequest friendRequest)
     {
         context.FriendRequests.Remove(friendRequest);
         await context.SaveChangesAsync();
@@ -37,7 +37,7 @@ public sealed class FriendRequestRepository(AppDbContext context) : IFriendReque
     public async Task<IEnumerable<FriendRequest>> GetIncomingAsync(Guid userId)
         => await context.FriendRequests
             .AsNoTracking()
-            .Where(fr => fr.ReceiverId == userId)
+            .Where(fr => fr.ReceiverId == userId && !fr.IsAccepted)
             .ToListAsync();
 
     public async Task<IEnumerable<FriendRequest>> GetOutgoingAsync(Guid userId)

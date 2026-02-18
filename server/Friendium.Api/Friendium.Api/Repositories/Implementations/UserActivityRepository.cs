@@ -11,11 +11,9 @@ namespace Friendium.Api.Repositories.Implementations;
 /// </summary>
 public sealed class UserActivityRepository(AppDbContext context) : IUserActivityRepository
 {
+
     public async Task<IEnumerable<UserActivity>> GetAllAsync(Guid userId)
-        => await context.UserActivities
-            .AsNoTracking()
-            .Where(a => a.UserId == userId)
-            .ToListAsync();
+        => await context.UserActivities.Where(a => a.UserId == userId).ToListAsync();
 
     public async Task AddAsync(UserActivity activity)
     {
@@ -23,9 +21,16 @@ public sealed class UserActivityRepository(AppDbContext context) : IUserActivity
         await context.SaveChangesAsync();
     }
 
+    public Task UpdateAsync(UserActivity activity)
+    {
+        context.UserActivities.Update(activity);
+        return context.SaveChangesAsync();
+    }
+
     public async Task RemoveAsync(UserActivity activity)
     {
         context.UserActivities.Remove(activity);
         await context.SaveChangesAsync();
     }
+
 }

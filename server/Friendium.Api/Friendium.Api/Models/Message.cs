@@ -21,7 +21,7 @@ public class Message
     /// <summary>
     /// The unique identifier of the chat that contains this message.
     /// </summary>
-    public Guid ChatId { get; set; }
+    public Guid ChatId { get; init; }
 
     /// <summary>
     /// The text content of the message. Limited to 500 characters.
@@ -32,7 +32,7 @@ public class Message
     /// <summary>
     /// UTC timestamp when the message was created.
     /// </summary>
-    public DateTime CreatedAt { get; init; } = DateTime.Now;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 
     /// <summary>
     /// UTC timestamp of the last update to the message, if any.

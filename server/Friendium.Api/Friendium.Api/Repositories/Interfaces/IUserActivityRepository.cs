@@ -18,6 +18,11 @@ public interface IUserActivityRepository
     Task AddAsync(UserActivity activity);
 
     /// <summary>
+    /// Updates an existing activity entry.
+    /// </summary>
+    Task UpdateAsync(UserActivity activity);
+
+    /// <summary>
     /// Removes an activity entry.
     /// </summary>
     Task RemoveAsync(UserActivity activity);

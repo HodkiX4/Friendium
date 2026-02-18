@@ -14,7 +14,6 @@ public sealed class UserRepository(AppDbContext context) : IUserRepository
 
     public async Task<IEnumerable<User>> GetAllAsync()
         => await context.Users.AsNoTracking().ToListAsync();
-
     public async Task<User?> GetByIdAsync(Guid id)
         => await context.Users.FindAsync(id);
 

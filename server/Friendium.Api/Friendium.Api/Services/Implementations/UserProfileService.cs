@@ -12,6 +12,24 @@ namespace Friendium.Api.Services.Implementations;
 /// </summary>
 public sealed class UserProfileService(IUserProfileRepository repo) : IUserProfileService
 {
+    public async Task<IEnumerable<UserSearchResultDto>> GetAllUserSearchResults()
+    {
+        var profiles = await repo.GetAllAsync();
+        return profiles.
+            Where(p => p.IsVisible)
+            .Select(p => new UserSearchResultDto(
+                p.UserId,
+                (p.User?.Firstname + " " + p.User?.Lastname).Trim(),
+                p.AvatarUrl,
+                string.IsNullOrWhiteSpace(p.Bio) ? null : p.Bio,
+                p.Interests,
+                p.City,
+                p.Country,
+                p.IsVisible,
+                p.Gender
+            ));
+    }
+
     public async Task<UserProfileDto?> GetUserProfile(Guid userId)
     {
         var existingProfile = await repo.GetByIdAsync(userId);

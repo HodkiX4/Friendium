@@ -12,7 +12,8 @@ namespace Friendium.Api.Services.Implementations;
 /// </summary>
 public sealed class FriendRequestService(
     IFriendRequestRepository friendRequestRepo,
-    IUserRepository userRepo
+    IUserRepository userRepo,
+    IFriendshipRepository friendshipRepo
     ) : IFriendRequestService
 {
     public async Task SendRequest(Guid senderId, Guid receiverId)
@@ -40,7 +41,23 @@ public sealed class FriendRequestService(
         var friendRequest = await friendRequestRepo.GetByIdAsync(requestId);
         if (friendRequest == null)
             throw new ResourceNotFoundException("Friend request not found");
-        await friendRequestRepo.AcceptAsync(friendRequest);
+
+        var friendship1 = new Friendship
+        {
+            UserId = friendRequest.SenderId,
+            FriendId = friendRequest.ReceiverId
+        };
+
+        var friendship2 = new Friendship
+        {
+            UserId = friendRequest.ReceiverId,
+            FriendId = friendRequest.SenderId
+        };
+
+        await friendshipRepo.AddAsync(friendship1);
+        await friendshipRepo.AddAsync(friendship2);
+
+        await friendRequestRepo.RemoveAsync(friendRequest);
     }
 
     public async Task RejectRequest(Guid requestId)
@@ -48,7 +65,7 @@ public sealed class FriendRequestService(
         var friendRequest = await friendRequestRepo.GetByIdAsync(requestId);
         if (friendRequest == null)
             throw new ResourceNotFoundException("Friend request not found");
-        await friendRequestRepo.RejectAsync(friendRequest);
+        await friendRequestRepo.RemoveAsync(friendRequest);
     }
 
     public async Task<IEnumerable<FriendRequestDto>> GetPendingRequests(Guid userId)

@@ -46,7 +46,7 @@ public sealed class UserProfile
     /// <summary>
     /// The list of personal interests or hobbies associated with the user.
     /// </summary>
-    public ICollection<string> Interests { get; set; } = [];
+    public ICollection<string> Interests { get; set; } = new List<string>();
 
     /// <summary>
     /// The city where the user currently resides.  
@@ -81,5 +81,5 @@ public sealed class UserProfile
     /// <summary>
     /// Navigation property representing the user associated with this profile.
     /// </summary>
-    public User? User { get; init; }
+    public User? User { get; set; }
 }

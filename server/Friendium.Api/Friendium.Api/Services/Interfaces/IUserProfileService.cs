@@ -1,7 +1,5 @@
-using Friendium.Api.DTOs;
 using Friendium.Api.DTOs.Request;
 using Friendium.Api.DTOs.Response;
-using Friendium.Api.Models;
 
 namespace Friendium.Api.Services.Interfaces;
 
@@ -10,6 +8,7 @@ namespace Friendium.Api.Services.Interfaces;
 /// </summary>
 public interface IUserProfileService
 {
+    Task<IEnumerable<UserSearchResultDto>> GetAllUserSearchResults();
     /// <summary>
     /// Gets a user's profile by their unique identifier.
     /// </summary>

@@ -3,6 +3,7 @@ using System;
 using Friendium.Api.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Friendium.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260217172840_UpdateFriendshipModel")]
+    partial class UpdateFriendshipModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,8 +92,7 @@ namespace Friendium.Api.Migrations
 
                     b.HasIndex("FriendId");
 
-                    b.HasIndex("UserId", "FriendId")
-                        .IsUnique();
+                    b.HasIndex("UserId");
 
                     b.ToTable("Friendships");
                 });

@@ -20,6 +20,12 @@ public sealed class FriendshipRepository(AppDbContext context) : IFriendshipRepo
     public async Task<Friendship?> GetByIdAsync(Guid friendshipId)
         => await context.Friendships.FindAsync(friendshipId);
 
+    public async Task AddAsync(Friendship friendship)
+    {
+        await context.Friendships.AddAsync(friendship);
+        await context.SaveChangesAsync();
+    }
+
     public async Task RemoveAsync(Friendship friendship)
     {
         context.Friendships.Remove(friendship);

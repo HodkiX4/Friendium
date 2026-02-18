@@ -49,7 +49,7 @@ public sealed class User
     /// <summary>
     /// The user's extended profile information (bio, preferences, gender, etc.).
     /// </summary>
-    public UserProfile? Profile { get; init; }
+    public UserProfile? Profile { get; set; }
 
     /// <summary>
     /// The user's activity data (last seen, online status).
@@ -75,4 +75,9 @@ public sealed class User
     /// Messages authored by the user.
     /// </summary>
     public ICollection<Message> Messages { get; set; } = new List<Message>();
+
+    /// <summary>
+    /// Notifications received by the user.
+    /// </summary>
+    public ICollection<Notification> Notifications { get; set; } = new List<Notification>();
 }

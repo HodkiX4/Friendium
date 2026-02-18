@@ -11,12 +11,25 @@ namespace Friendium.Api.Repositories.Implementations;
 /// </summary>
 public sealed class UserProfileRepository(AppDbContext context) : IUserProfileRepository
 {
+    public async Task<IEnumerable<UserProfile>> GetAllAsync()
+        => await context.UserProfiles.Include(p => p.User)
+            .AsNoTracking()
+            .ToListAsync();
+
     public async Task<UserProfile?> GetByIdAsync(Guid userId)
-        => await context.UserProfiles.Where(p => p.UserId == userId).FirstOrDefaultAsync();
+        => await context.UserProfiles.Include(p => p.User)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(p => p.UserId == userId);
 
     public async Task UpdateAsync(UserProfile profile)
     {
         context.UserProfiles.Update(profile);
+        await context.SaveChangesAsync();
+    }
+
+    public async Task AddAsync(UserProfile profile)
+    {
+        await context.UserProfiles.AddAsync(profile);
         await context.SaveChangesAsync();
     }
 }

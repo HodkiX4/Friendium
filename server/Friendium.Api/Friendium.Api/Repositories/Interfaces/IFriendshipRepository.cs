@@ -22,6 +22,12 @@ public interface IFriendshipRepository
     Task<Friendship?> GetByIdAsync(Guid friendshipId);
 
     /// <summary>
+    /// Adds a new friendship record.
+    /// </summary>
+    /// <param name="friendship">The friendship to add.</param>
+    Task AddAsync(Friendship friendship);
+
+    /// <summary>
     /// Removes the friendship between users.
     /// </summary>
     /// <param name="id">The friend we want to remove.</param>

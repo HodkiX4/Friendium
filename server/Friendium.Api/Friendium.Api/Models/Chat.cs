@@ -9,7 +9,7 @@ public class Chat
     /// <summary>
     /// The unique identifier of the chat.
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// The collection of user identifiers participating in this chat.
@@ -25,5 +25,5 @@ public class Chat
     /// <summary>
     /// The UTC timestamp when the chat was created.
     /// </summary>
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime CreatedAt { get; init; } = DateTime.UtcNow;
 }

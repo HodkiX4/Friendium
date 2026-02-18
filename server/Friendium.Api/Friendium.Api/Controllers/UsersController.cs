@@ -1,4 +1,3 @@
-using Friendium.Api.DTOs;
 using Friendium.Api.DTOs.Request;
 using Friendium.Api.Exceptions;
 using Friendium.Api.Services.Interfaces;
@@ -19,8 +18,31 @@ public sealed class UsersController(IUserService userService, IUserProfileServic
     [HttpGet("all")]
     public async Task<IActionResult> GetUsers()
     {
-        var users = await userService.GetUsers();
-        return Ok(users);
+        try
+        {
+            var users = await userService.GetUsers();
+            return Ok(users);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(new { message = e.Message });
+        }
+    }
+
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchUsers()
+    {
+        try
+        {
+            var users = await userProfileService.GetAllUserSearchResults();
+            return Ok(users);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            return BadRequest(new { message = e.Message });
+        }
     }
 
     [HttpGet("{userId:guid}")]
@@ -41,8 +63,8 @@ public sealed class UsersController(IUserService userService, IUserProfileServic
         }
     }
 
-    [HttpGet("/profile/{userId:guid}")]
-    public async Task<IActionResult> GetUserProfile(Guid userId)
+    [HttpGet("profile/{userId:guid}")]
+    public async Task<IActionResult> GetUserProfile([FromRoute] Guid userId)
     {
         try
         {
@@ -59,7 +81,7 @@ public sealed class UsersController(IUserService userService, IUserProfileServic
         }
     }
 
-    [HttpPut("/profile{userId:guid}")]
+    [HttpPut("profile/{userId:guid}")]
     public async Task<IActionResult> UpdateUserProfile([FromRoute] Guid userId, [FromBody] UpdateUserProfileDto dto)
     {
         if (!ModelState.IsValid)
@@ -73,6 +95,37 @@ public sealed class UsersController(IUserService userService, IUserProfileServic
         catch (ResourceNotFoundException e)
         {
             return NotFound(new { message = e.Message });
+        }
+        catch (Exception e)
+        {
+            return BadRequest(new { message = e.Message });
+        }
+    }
+
+    /// <summary>
+    /// Updates user information (firstname, lastname, password).
+    /// </summary>
+    /// <param name="userId">The user ID to update.</param>
+    /// <param name="dto">The update data.</param>
+    /// <returns>Returns the updated user.</returns>
+    [HttpPut("{userId:guid}")]
+    public async Task<IActionResult> UpdateUser([FromRoute] Guid userId, [FromBody] UpdateUserDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(new { message = ModelState });
+
+        try
+        {
+            var updatedUser = await userService.UpdateUser(userId, dto);
+            return Ok(updatedUser);
+        }
+        catch (ResourceNotFoundException e)
+        {
+            return NotFound(new { message = e.Message });
+        }
+        catch (ConflictException e)
+        {
+            return Conflict(new { message = e.Message });
         }
         catch (Exception e)
         {
